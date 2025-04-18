@@ -1,0 +1,4 @@
+apiVersion: v2
+name: kaniko-job
+version: 0.1.0
+appVersion: "latest"

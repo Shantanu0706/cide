@@ -1,0 +1,25 @@
+pipeline {
+  agent { label 'docker-enabled-agent' }
+  environment {
+    IMAGE = "123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-enterprise-ci-cd:${env.BUILD_NUMBER}"
+  }
+  stages {
+    stage('Docker Build') {
+      when { expression { env.DIND_ENABLED == 'true' } }
+      steps {
+        sh 'docker build -t $IMAGE .'
+        sh 'docker push $IMAGE'
+      }
+    }
+    stage('Kaniko Build') {
+      when { expression { env.DIND_ENABLED != 'true' } }
+      steps {
+        sh '''
+helm upgrade --install kaniko-job ./kaniko/helm \
+  --set image=$IMAGE \
+  --set gitRepo=https://github.com/sd-sredevops/sre/enterprise-ci-cd
+'''
+      }
+    }
+  }
+}

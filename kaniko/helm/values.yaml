@@ -1,0 +1,2 @@
+image: "123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-enterprise-ci-cd:latest"
+gitRepo: "https://github.com/sd-sredevops/sre/enterprise-ci-cd.git"
